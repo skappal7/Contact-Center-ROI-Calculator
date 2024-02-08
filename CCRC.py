@@ -66,4 +66,17 @@ total_savings = calculate_savings(avg_handle_time, non_talk_time, wrapup_time,
                                   reduction_percents, num_calls_received)
 
 # Display total potential savings
-st.write(f'Total Potential Savings: ${total_savings:.2f}')
+st.write(f'Total Potential Savings: **${total_savings:.2f}**')
+
+# Display new values based on selection
+st.subheader('New Values based on Selection')
+new_values = {
+    'Average Handle Time (seconds)': avg_handle_time * (1 - reduction_percents['avg_handle_time'] / 100),
+    'Non-Talk Time (seconds)': non_talk_time * (1 - reduction_percents['non_talk_time'] / 100),
+    'Wrap-up Time (seconds)': wrapup_time * (1 - reduction_percents['wrapup_time'] / 100),
+    'Speed to Answer (seconds)': speed_to_answer * (1 - reduction_percents['speed_to_answer'] / 100),
+    'First Call Resolution (%)': fcr_percent + (100 - fcr_percent) * (reduction_percents['fcr_percent'] / 100),
+    'Sentiment Score (1-5)': sentiment_score + (5 - sentiment_score) * (reduction_percents['sentiment_score'] / 100),
+    'Repeat Caller Rate (%)': repeat_caller_percent * (1 - reduction_percents['repeat_caller_percent'] / 100)
+}
+st.table(new_values)
