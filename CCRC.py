@@ -12,15 +12,15 @@ import streamlit as st
 # Function to calculate potential savings
 def calculate_savings(avg_handle_time, non_talk_time, wrapup_time, speed_to_answer,
                       fcr_percent, sentiment_score, repeat_caller_percent, cost_per_call,
-                      reduction_percent, num_calls_received):
+                      reduction_percents, num_calls_received):
     # Calculate the reductions
-    reduced_avg_handle_time = avg_handle_time * (1 - reduction_percent / 100)
-    reduced_non_talk_time = non_talk_time * (1 - reduction_percent / 100)
-    reduced_wrapup_time = wrapup_time * (1 - reduction_percent / 100)
-    reduced_speed_to_answer = speed_to_answer * (1 - reduction_percent / 100)
-    reduced_fcr_percent = fcr_percent + (100 - fcr_percent) * (reduction_percent / 100)
-    reduced_sentiment_score = sentiment_score + (5 - sentiment_score) * (reduction_percent / 100)
-    reduced_repeat_caller_percent = repeat_caller_percent * (1 - reduction_percent / 100)
+    reduced_avg_handle_time = avg_handle_time * (1 - reduction_percents['avg_handle_time'] / 100)
+    reduced_non_talk_time = non_talk_time * (1 - reduction_percents['non_talk_time'] / 100)
+    reduced_wrapup_time = wrapup_time * (1 - reduction_percents['wrapup_time'] / 100)
+    reduced_speed_to_answer = speed_to_answer * (1 - reduction_percents['speed_to_answer'] / 100)
+    reduced_fcr_percent = fcr_percent + (100 - fcr_percent) * (reduction_percents['fcr_percent'] / 100)
+    reduced_sentiment_score = sentiment_score + (5 - sentiment_score) * (reduction_percents['sentiment_score'] / 100)
+    reduced_repeat_caller_percent = repeat_caller_percent * (1 - reduction_percents['repeat_caller_percent'] / 100)
     
     # Calculate potential savings per call
     savings_per_call = (avg_handle_time - reduced_avg_handle_time +
@@ -47,16 +47,24 @@ repeat_caller_percent = st.number_input('Repeat Caller Rate (%)', value=10)
 cost_per_call = st.number_input('Cost of Call ($)', value=5)
 num_calls_received = st.number_input('Number of Calls Received', value=100)
 
-# Percentage reduction slider in a separate panel
+# Percentage reduction sliders for each variable in a separate panel
 with st.sidebar:
     st.title('Percentage Reduction')
-    reduction_percent = st.slider('', 1, 100, 10, 1)
+    reduction_percents = {
+        'avg_handle_time': st.slider('Avg Handle Time Reduction (%)', 1, 100, 10, 1),
+        'non_talk_time': st.slider('Non-Talk Time Reduction (%)', 1, 100, 10, 1),
+        'wrapup_time': st.slider('Wrap-up Time Reduction (%)', 1, 100, 10, 1),
+        'speed_to_answer': st.slider('Speed to Answer Reduction (%)', 1, 100, 10, 1),
+        'fcr_percent': st.slider('FCR Improvement (%)', 1, 100, 10, 1),
+        'sentiment_score': st.slider('Sentiment Score Improvement (%)', 1, 100, 10, 1),
+        'repeat_caller_percent': st.slider('Repeat Caller Rate Reduction (%)', 1, 100, 10, 1)
+    }
 
 # Calculate total potential savings
 total_savings = calculate_savings(avg_handle_time, non_talk_time, wrapup_time,
                                   speed_to_answer, fcr_percent, sentiment_score,
                                   repeat_caller_percent, cost_per_call,
-                                  reduction_percent, num_calls_received)
+                                  reduction_percents, num_calls_received)
 
 # Display total potential savings
 st.write(f'Total Potential Savings: ${total_savings:.2f}')
