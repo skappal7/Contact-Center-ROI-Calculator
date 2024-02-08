@@ -31,16 +31,10 @@ def calculate_savings(avg_handle_time, non_talk_time, wrapup_time, speed_to_answ
     # Calculate total potential savings
     total_savings = savings_per_call * num_calls_received
     
-    # Calculate percentage savings compared to original values
-    avg_handle_time_savings = (avg_handle_time - reduced_avg_handle_time) / avg_handle_time * 100
-    non_talk_time_savings = (non_talk_time - reduced_non_talk_time) / non_talk_time * 100
-    wrapup_time_savings = (wrapup_time - reduced_wrapup_time) / wrapup_time * 100
-    speed_to_answer_savings = (speed_to_answer - reduced_speed_to_answer) / speed_to_answer * 100
-    fcr_percent_savings = (fcr_percent - reduced_fcr_percent) / fcr_percent * 100
-    sentiment_score_savings = (5 - reduced_sentiment_score) / (5 - sentiment_score) * 100
-    repeat_caller_percent_savings = (repeat_caller_percent - reduced_repeat_caller_percent) / repeat_caller_percent * 100
+    # Calculate new cost based on the new values
+    new_cost = total_savings + (cost_per_call * num_calls_received)
     
-    return total_savings, {
+    return total_savings, new_cost, {
         'Average Handle Time (seconds)': reduced_avg_handle_time,
         'Non-Talk Time (seconds)': reduced_non_talk_time,
         'Wrap-up Time (seconds)': reduced_wrapup_time,
@@ -48,13 +42,12 @@ def calculate_savings(avg_handle_time, non_talk_time, wrapup_time, speed_to_answ
         'First Call Resolution (%)': reduced_fcr_percent,
         'Sentiment Score (1-5)': reduced_sentiment_score,
         'Repeat Caller Rate (%)': reduced_repeat_caller_percent
-    }, total_savings
+    }
 
 # Streamlit UI
 st.title('Contact Center Savings Calculator')
 
 # Input variables
-original_cost = st.number_input('Original Cost of Metric Performance ($)', value=10000)
 avg_handle_time = st.number_input('Average Handle Time (seconds)', value=300)
 non_talk_time = st.number_input('Non-Talk Time (seconds)', value=60)
 wrapup_time = st.number_input('Wrap-up Time (seconds)', value=30)
@@ -78,16 +71,16 @@ with st.sidebar:
         'repeat_caller_percent': st.slider('Repeat Caller Rate Reduction (%)', 1, 100, 10, 1)
     }
 
-# Calculate total potential savings, new values, and ROI
-total_savings, new_values, roi = calculate_savings(avg_handle_time, non_talk_time, wrapup_time,
-                                                   speed_to_answer, fcr_percent, sentiment_score,
-                                                   repeat_caller_percent, cost_per_call,
-                                                   reduction_percents, num_calls_received)
+# Calculate total potential savings, new cost, and new values
+total_savings, new_cost, new_values = calculate_savings(avg_handle_time, non_talk_time, wrapup_time,
+                                                        speed_to_answer, fcr_percent, sentiment_score,
+                                                        repeat_caller_percent, cost_per_call,
+                                                        reduction_percents, num_calls_received)
 
-# Display total potential savings and ROI
-st.subheader('Total Potential Savings and ROI')
-st.write(f'Original Cost of Metric Performance: **${original_cost:.2f}**')
-st.write(f'ROI Achieved based on New Values: **${roi:.2f}**')
+# Display total potential savings and new cost
+st.subheader('Total Potential Savings and New Cost')
+st.write(f'Total Potential Savings: **${total_savings:.2f}**')
+st.write(f'New Cost based on New Values: **${new_cost:.2f}**')
 
 # Display new values based on selection
 st.subheader('New Values based on Selection')
