@@ -34,7 +34,7 @@ def calculate_savings(avg_handle_time, non_talk_time, wrapup_time, speed_to_answ
     return total_savings
 
 # Streamlit UI
-st.title('Contact Center Savings Calculator')
+st.title('Contact Center Metric Improvement ROI Calculator')
 
 # Input variables
 avg_handle_time = st.number_input('Average Handle Time (seconds)', value=300)
