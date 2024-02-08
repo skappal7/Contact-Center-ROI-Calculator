@@ -31,7 +31,32 @@ def calculate_savings(avg_handle_time, non_talk_time, wrapup_time, speed_to_answ
     # Calculate total potential savings
     total_savings = savings_per_call * num_calls_received
     
-    return total_savings
+    # Calculate percentage savings compared to original values
+    avg_handle_time_savings = (avg_handle_time - reduced_avg_handle_time) / avg_handle_time * 100
+    non_talk_time_savings = (non_talk_time - reduced_non_talk_time) / non_talk_time * 100
+    wrapup_time_savings = (wrapup_time - reduced_wrapup_time) / wrapup_time * 100
+    speed_to_answer_savings = (speed_to_answer - reduced_speed_to_answer) / speed_to_answer * 100
+    fcr_percent_savings = (fcr_percent - reduced_fcr_percent) / fcr_percent * 100
+    sentiment_score_savings = (5 - reduced_sentiment_score) / (5 - sentiment_score) * 100
+    repeat_caller_percent_savings = (repeat_caller_percent - reduced_repeat_caller_percent) / repeat_caller_percent * 100
+    
+    return total_savings, {
+        'Average Handle Time (seconds)': reduced_avg_handle_time,
+        'Non-Talk Time (seconds)': reduced_non_talk_time,
+        'Wrap-up Time (seconds)': reduced_wrapup_time,
+        'Speed to Answer (seconds)': reduced_speed_to_answer,
+        'First Call Resolution (%)': reduced_fcr_percent,
+        'Sentiment Score (1-5)': reduced_sentiment_score,
+        'Repeat Caller Rate (%)': reduced_repeat_caller_percent
+    }, {
+        'Average Handle Time Savings (%)': avg_handle_time_savings,
+        'Non-Talk Time Savings (%)': non_talk_time_savings,
+        'Wrap-up Time Savings (%)': wrapup_time_savings,
+        'Speed to Answer Savings (%)': speed_to_answer_savings,
+        'First Call Resolution Savings (%)': fcr_percent_savings,
+        'Sentiment Score Savings (%)': sentiment_score_savings,
+        'Repeat Caller Rate Savings (%)': repeat_caller_percent_savings
+    }
 
 # Streamlit UI
 st.title('Contact Center Savings Calculator')
@@ -60,35 +85,21 @@ with st.sidebar:
         'repeat_caller_percent': st.slider('Repeat Caller Rate Reduction (%)', 1, 100, 10, 1)
     }
 
-# Calculate total potential savings
-total_savings = calculate_savings(avg_handle_time, non_talk_time, wrapup_time,
-                                  speed_to_answer, fcr_percent, sentiment_score,
-                                  repeat_caller_percent, cost_per_call,
-                                  reduction_percents, num_calls_received)
+# Calculate total potential savings and new values
+total_savings, new_values, savings_percentages = calculate_savings(avg_handle_time, non_talk_time, wrapup_time,
+                                                                  speed_to_answer, fcr_percent, sentiment_score,
+                                                                  repeat_caller_percent, cost_per_call,
+                                                                  reduction_percents, num_calls_received)
 
 # Display total potential savings
 st.write(f'Total Potential Savings: **${total_savings:.2f}**')
 
 # Display new values based on selection
 st.subheader('New Values based on Selection')
-new_values = {
-    'Metric': ['Average Handle Time (seconds)', 'Non-Talk Time (seconds)', 'Wrap-up Time (seconds)',
-               'Speed to Answer (seconds)', 'First Call Resolution (%)', 'Sentiment Score (1-5)',
-               'Repeat Caller Rate (%)'],
-    'Updated Values': [f'{avg_handle_time * (1 - reduction_percents["avg_handle_time"] / 100):.1f}',
-                       f'{non_talk_time * (1 - reduction_percents["non_talk_time"] / 100):.1f}',
-                       f'{wrapup_time * (1 - reduction_percents["wrapup_time"] / 100):.1f}',
-                       f'{speed_to_answer * (1 - reduction_percents["speed_to_answer"] / 100):.1f}',
-                       f'{fcr_percent + (100 - fcr_percent) * (reduction_percents["fcr_percent"] / 100):.1f}',
-                       f'{sentiment_score + (5 - sentiment_score) * (reduction_percents["sentiment_score"] / 100):.1f}',
-                       f'{repeat_caller_percent * (1 - reduction_percents["repeat_caller_percent"] / 100):.1f}'],
-    'Savings (%)': [f'{reduction_percents["avg_handle_time"]:.1f}',
-                    f'{reduction_percents["non_talk_time"]:.1f}',
-                    f'{reduction_percents["wrapup_time"]:.1f}',
-                    f'{reduction_percents["speed_to_answer"]:.1f}',
-                    f'{reduction_percents["fcr_percent"]:.1f}',
-                    f'{reduction_percents["sentiment_score"]:.1f}',
-                    f'{reduction_percents["repeat_caller_percent"]:.1f}']
-}
+new_values_display = {key: f'{value:.1f}' for key, value in new_values.items()}
+st.table(new_values_display)
 
-st.table(new_values)
+# Display percentage savings compared to original values
+st.subheader('Percentage Savings compared to Original Values')
+savings_percentages_display = {key: f'{value:.2f}%' for key, value in savings_percentages.items()}
+st.table(savings_percentages_display)
