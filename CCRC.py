@@ -34,7 +34,7 @@ def calculate_savings(avg_handle_time, non_talk_time, wrapup_time, speed_to_answ
     return total_savings
 
 # Streamlit UI
-st.title('Contact Center Metric Improvement ROI Calculator')
+st.title('Contact Center Savings Calculator')
 
 # Input variables
 avg_handle_time = st.number_input('Average Handle Time (seconds)', value=300)
@@ -72,12 +72,23 @@ st.write(f'Total Potential Savings: **${total_savings:.2f}**')
 # Display new values based on selection
 st.subheader('New Values based on Selection')
 new_values = {
-    'Average Handle Time (seconds)': f'{avg_handle_time * (1 - reduction_percents["avg_handle_time"] / 100):.1f}',
-    'Non-Talk Time (seconds)': f'{non_talk_time * (1 - reduction_percents["non_talk_time"] / 100):.1f}',
-    'Wrap-up Time (seconds)': f'{wrapup_time * (1 - reduction_percents["wrapup_time"] / 100):.1f}',
-    'Speed to Answer (seconds)': f'{speed_to_answer * (1 - reduction_percents["speed_to_answer"] / 100):.1f}',
-    'First Call Resolution (%)': f'{fcr_percent + (100 - fcr_percent) * (reduction_percents["fcr_percent"] / 100):.1f}',
-    'Sentiment Score (1-5)': f'{sentiment_score + (5 - sentiment_score) * (reduction_percents["sentiment_score"] / 100):.1f}',
-    'Repeat Caller Rate (%)': f'{repeat_caller_percent * (1 - reduction_percents["repeat_caller_percent"] / 100):.1f}'
+    'Metric': ['Average Handle Time (seconds)', 'Non-Talk Time (seconds)', 'Wrap-up Time (seconds)',
+               'Speed to Answer (seconds)', 'First Call Resolution (%)', 'Sentiment Score (1-5)',
+               'Repeat Caller Rate (%)'],
+    'Updated Values': [f'{avg_handle_time * (1 - reduction_percents["avg_handle_time"] / 100):.1f}',
+                       f'{non_talk_time * (1 - reduction_percents["non_talk_time"] / 100):.1f}',
+                       f'{wrapup_time * (1 - reduction_percents["wrapup_time"] / 100):.1f}',
+                       f'{speed_to_answer * (1 - reduction_percents["speed_to_answer"] / 100):.1f}',
+                       f'{fcr_percent + (100 - fcr_percent) * (reduction_percents["fcr_percent"] / 100):.1f}',
+                       f'{sentiment_score + (5 - sentiment_score) * (reduction_percents["sentiment_score"] / 100):.1f}',
+                       f'{repeat_caller_percent * (1 - reduction_percents["repeat_caller_percent"] / 100):.1f}'],
+    'Savings (%)': [f'{reduction_percents["avg_handle_time"]:.1f}',
+                    f'{reduction_percents["non_talk_time"]:.1f}',
+                    f'{reduction_percents["wrapup_time"]:.1f}',
+                    f'{reduction_percents["speed_to_answer"]:.1f}',
+                    f'{reduction_percents["fcr_percent"]:.1f}',
+                    f'{reduction_percents["sentiment_score"]:.1f}',
+                    f'{reduction_percents["repeat_caller_percent"]:.1f}']
 }
+
 st.table(new_values)
