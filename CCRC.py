@@ -46,38 +46,28 @@ default_repeat_caller_percent = 10
 default_cost_per_call = 5
 default_num_calls_received = 100
 
-avg_handle_time = st.number_input('Average Handle Time (seconds)', value=default_avg_handle_time)
-non_talk_time = st.number_input('Non-Talk Time (seconds)', value=default_non_talk_time)
-wrapup_time = st.number_input('Wrap-up Time (seconds)', value=default_wrapup_time)
-speed_to_answer = st.number_input('Speed to Answer (seconds)', value=default_speed_to_answer)
-fcr_percent = st.number_input('First Call Resolution (%)', value=default_fcr_percent)
-sentiment_score = st.number_input('Sentiment Score (1-5)', min_value=1, max_value=5, value=default_sentiment_score)
-repeat_caller_percent = st.number_input('Repeat Caller Rate (%)', value=default_repeat_caller_percent)
+# Percentage reduction sliders for each variable
+st.sidebar.title('Percentage Reduction')
+reduction_percents = {
+    'avg_handle_time': st.sidebar.slider('Avg Handle Time Reduction (%)', 1, 100, 10, 1),
+    'non_talk_time': st.sidebar.slider('Non-Talk Time Reduction (%)', 1, 100, 10, 1),
+    'wrapup_time': st.sidebar.slider('Wrap-up Time Reduction (%)', 1, 100, 10, 1),
+    'speed_to_answer': st.sidebar.slider('Speed to Answer Reduction (%)', 1, 100, 10, 1),
+    'fcr_percent': st.sidebar.slider('FCR Improvement (%)', 1, 100, 10, 1),
+    'sentiment_score': st.sidebar.slider('Sentiment Score Improvement (%)', 1, 100, 10, 1),
+    'repeat_caller_percent': st.sidebar.slider('Repeat Caller Rate Reduction (%)', 1, 100, 10, 1)
+}
+
+# Input variables with reduction
+avg_handle_time = st.number_input('Average Handle Time (seconds)', value=default_avg_handle_time - (default_avg_handle_time * reduction_percents["avg_handle_time"] / 100))
+non_talk_time = st.number_input('Non-Talk Time (seconds)', value=default_non_talk_time - (default_non_talk_time * reduction_percents["non_talk_time"] / 100))
+wrapup_time = st.number_input('Wrap-up Time (seconds)', value=default_wrapup_time - (default_wrapup_time * reduction_percents["wrapup_time"] / 100))
+speed_to_answer = st.number_input('Speed to Answer (seconds)', value=default_speed_to_answer - (default_speed_to_answer * reduction_percents["speed_to_answer"] / 100))
+fcr_percent = st.number_input('First Call Resolution (%)', value=default_fcr_percent + (100 - default_fcr_percent) * (reduction_percents["fcr_percent"] / 100))
+sentiment_score = st.number_input('Sentiment Score (1-5)', min_value=1, max_value=5, value=default_sentiment_score + (5 - default_sentiment_score) * (reduction_percents["sentiment_score"] / 100))
+repeat_caller_percent = st.number_input('Repeat Caller Rate (%)', value=default_repeat_caller_percent - (default_repeat_caller_percent * reduction_percents["repeat_caller_percent"] / 100))
 cost_per_call = st.number_input('Cost of Call ($)', value=default_cost_per_call)
 num_calls_received = st.number_input('Number of Calls Received', value=default_num_calls_received)
-
-# Percentage reduction sliders for each variable in a separate panel
-with st.sidebar:
-    st.title('Percentage Reduction')
-    reduction_percents = {
-        'avg_handle_time': st.slider('Avg Handle Time Reduction (%)', 1, 100, 10, 1),
-        'non_talk_time': st.slider('Non-Talk Time Reduction (%)', 1, 100, 10, 1),
-        'wrapup_time': st.slider('Wrap-up Time Reduction (%)', 1, 100, 10, 1),
-        'speed_to_answer': st.slider('Speed to Answer Reduction (%)', 1, 100, 10, 1),
-        'fcr_percent': st.slider('FCR Improvement (%)', 1, 100, 10, 1),
-        'sentiment_score': st.slider('Sentiment Score Improvement (%)', 1, 100, 10, 1),
-        'repeat_caller_percent': st.slider('Repeat Caller Rate Reduction (%)', 1, 100, 10, 1)
-    }
-
-# Display reduced values in input sections
-st.subheader('Reduced Values:')
-st.write(f'Reduced Average Handle Time: {avg_handle_time - (avg_handle_time * reduction_percents["avg_handle_time"] / 100):.2f} seconds')
-st.write(f'Reduced Non-Talk Time: {non_talk_time - (non_talk_time * reduction_percents["non_talk_time"] / 100):.2f} seconds')
-st.write(f'Reduced Wrap-up Time: {wrapup_time - (wrapup_time * reduction_percents["wrapup_time"] / 100):.2f} seconds')
-st.write(f'Reduced Speed to Answer: {speed_to_answer - (speed_to_answer * reduction_percents["speed_to_answer"] / 100):.2f} seconds')
-st.write(f'Reduced FCR Percentage: {fcr_percent + (100 - fcr_percent) * (reduction_percents["fcr_percent"] / 100):.2f}%')
-st.write(f'Reduced Sentiment Score: {sentiment_score + (5 - sentiment_score) * (reduction_percents["sentiment_score"] / 100):.2f}')
-st.write(f'Reduced Repeat Caller Rate: {repeat_caller_percent - (repeat_caller_percent * reduction_percents["repeat_caller_percent"] / 100):.2f}%')
 
 # Reset button to reset all input values
 if st.button('Reset'):
