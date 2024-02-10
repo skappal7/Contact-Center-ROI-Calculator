@@ -85,7 +85,7 @@ seconds_saved_per_call = call_duration_before - call_duration_after
 savings_per_call = seconds_saved_per_call * cost_per_sec  
 total_monthly_savings = savings_per_call * calls_per_day * 30
 
-# Display FTE savings, total monthly savings, and total improvement percentage at the top
+# Display FTE savings and total monthly savings at the top
 col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown(
@@ -112,7 +112,7 @@ with col2:
 with col3:
     st.markdown(
         f"""
-        <div style="background-color:#2E2E2E;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:92px;">
+        <div style="background-color:#2E2E2E;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
         <span style="color:#ffffff;font-size:18px;"><b>Total Improvement Percentage</b></span><br>
         <span style="color:#ffffff;font-size:28px;"><b>{round(total_reduction, 2)}%</b></span>
         </div>
@@ -136,18 +136,24 @@ for i in range(len(months)):
         savings = monthly_savings * improvement_per_month
     savings_per_month.append(savings)
 
+# Filter months based on selected date range
+start_idx = months.index(start_date.strftime("%b %Y"))
+end_idx = months.index(end_date.strftime("%b %Y"))
+months_filtered = months[start_idx:end_idx+1]
+savings_per_month_filtered = savings_per_month[start_idx:end_idx+1]
+
 # Create cumulative savings
 cumulative_savings = []
 cum_sum = 0
-for savings in savings_per_month:
+for savings in savings_per_month_filtered:
     cum_sum += savings  
     cumulative_savings.append(cum_sum)
 
 # Create waterfall chart data
 waterfall_data = [
-    go.Bar(x=months, y=savings_per_month, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings', 
-           text=[f"${s:,.0f}" for s in savings_per_month], textposition='inside'),
-    go.Scatter(x=months, y=cumulative_savings, mode='lines+markers', marker=dict(color='rgb(255, 0, 0)'), 
+    go.Bar(x=months_filtered, y=savings_per_month_filtered, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings', 
+           text=[f"${s:,.0f}" for s in savings_per_month_filtered], textposition='inside'),
+    go.Scatter(x=months_filtered, y=cumulative_savings, mode='lines+markers', marker=dict(color='rgb(255, 0, 0)'), 
                name='Cumulative Savings')
 ]
 
