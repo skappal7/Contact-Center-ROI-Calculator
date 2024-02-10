@@ -11,7 +11,7 @@ from PIL import Image
 import pandas as pd
 import plotly.graph_objects as go
 
-st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:", layout="wide")
+st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:")
 
 # Company logo
 logo = Image.open('Humach.png')
@@ -23,20 +23,28 @@ st.title('Conversation AI ROI Calculator')
 months = ['Jan 2023', 'Feb 2023', 'Mar 2023', 'Apr 2023', 'May 2023', 'Jun 2023', 'Jul 2023', 'Aug 2023', 'Sep 2023', 'Oct 2023', 'Nov 2023', 'Dec 2023']
 
 # Input current metrics
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2 = st.columns(2)
 current_aht = col1.number_input('Current AHT', min_value=0.0, format="%.0f")
 current_non_talk_time = col2.number_input('Current Non-Talk Time', min_value=0.0, format="%.0f")
-current_asa = col3.number_input('Current ASA', min_value=0.0, format="%.0f")
+current_asa = col1.number_input('Current ASA', min_value=0.0, format="%.0f")
+current_wrap_up = col2.number_input('Current Wrap Up', min_value=0.0, format="%.0f")
 
-col4, col5, col6 = st.columns([1, 1, 1])
-current_wrap_up = col4.number_input('Current Wrap Up', min_value=0.0, format="%.0f")
-aht_slider = col5.slider('AHT % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
-non_talk_slider = col6.slider('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+# Input simulated metrics  
+col3, col4 = st.columns(2)
+aht_slider = col3.slider('AHT % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+aht = col3.number_input('AHT % Reduction', min_value=0.0, max_value=100.0, step=0.05, value=aht_slider, format="%.2f")
+non_talk_slider = col4.slider('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+non_talk_time = col4.number_input('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, step=0.05, value=non_talk_slider, format="%.2f")
 
-col7, col8, col9 = st.columns([1, 1, 1])
-asa_slider = col7.slider('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
-wrap_up_slider = col8.slider('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
-calls_per_day = col9.number_input('Number of Calls per Day', min_value=0, format="%i")  
+# Input simulated metrics  
+col5, col6 = st.columns(2)
+asa_slider = col5.slider('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+asa = col5.number_input('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, value=asa_slider, format="%.2f")
+wrap_up_slider = col6.slider('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+wrap_up = col6.number_input('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, value=wrap_up_slider, format="%.2f")
+
+# Input number of calls
+calls_per_day = st.number_input('Number of Calls per Day', min_value=0, format="%i")  
 
 # Input cost related metrics
 cost_per_call = st.number_input('Cost Per Call (Fully loaded)', min_value=0.0, format="%.2f")
@@ -73,40 +81,29 @@ seconds_saved_per_call = call_duration_before - call_duration_after
 savings_per_call = seconds_saved_per_call * cost_per_sec  
 total_monthly_savings = savings_per_call * calls_per_day * 30
 
-# Total improvement percentage
-total_improvement_percentage = round(total_reduction, 2)
+# Display FTE savings and total monthly savings at the top
+col7, col8 = st.columns(2)
+with col7:
+    st.markdown(
+        f"""
+        <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <span style="color:#002244;font-size:18px;"><b>FTE Savings</b></span><br>
+        <span style="color:#ffffff;font-size:28px;"><b>{fte_savings}</b></span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-# Display FTE savings, total monthly savings, and total improvement percentage
-col10, col11, col12 = st.columns([1, 1, 1])
-col10.markdown(
-    f"""
-    <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
-    <span style="color:#002244;font-size:18px;"><b>FTE Savings</b></span><br>
-    <span style="color:#ffffff;font-size:28px;"><b>{fte_savings}</b></span>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
-col11.markdown(
-    f"""
-    <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
-    <span style="color:#002244;font-size:18px;"><b>Total Monthly Savings</b></span><br>
-    <span style="color:#ffffff;font-size:28px;"><b>${total_monthly_savings:,.2f}</b></span>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
-col12.markdown(
-    f"""
-    <div style="background-color:#00405F;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
-    <span style="color:#ffffff;font-size:18px;"><b>Total Improvement Percentage</b></span><br>
-    <span style="color:#ffffff;font-size:28px;"><b>{total_improvement_percentage}%</b></span>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+with col8:
+    st.markdown(
+        f"""
+        <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <span style="color:#002244;font-size:18px;"><b>Total Monthly Savings</b></span><br>
+        <span style="color:#ffffff;font-size:28px;"><b>${total_monthly_savings:,.2f}</b></span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # Waterfall chart for savings
 st.subheader("Monthly Savings Waterfall Chart")
@@ -150,3 +147,6 @@ fig = go.Figure(data=waterfall_data, layout=waterfall_layout)
 
 # Plot the waterfall chart
 st.plotly_chart(fig)  
+
+# Show total improvement percentage
+st.write(f'Total Improvement Percentage: {round(total_reduction, 2)}%')
