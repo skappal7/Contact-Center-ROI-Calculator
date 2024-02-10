@@ -11,13 +11,13 @@ from PIL import Image
 import pandas as pd
 import plotly.express as px
 
-st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:")
+st.set_page_config(page_title='Conversational AI Implementation ROI Calculator', page_icon=":robot:")
 
 # Company logo
 logo = Image.open('Humach.png')
-st.image(logo, width=100)
+st.image(logo, width=200)
 
-st.title('Conversational AI Implementation ROI Calculator')
+st.title('Conversation AI ROI Calculator')
 
 # Input current metrics
 col1, col2 = st.columns(2)
@@ -28,10 +28,17 @@ current_wrap_up = col2.number_input('Current Wrap Up', min_value=0.0, format="%.
 
 # Input simulated metrics  
 col3, col4 = st.columns(2)
+aht_slider = col3.slider('AHT % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
 aht = col3.number_input('AHT % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+non_talk_slider = col4.slider('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
 non_talk_time = col4.number_input('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
-asa = col3.number_input('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
-wrap_up = col4.number_input('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+
+# Input simulated metrics  
+col5, col6 = st.columns(2)
+asa_slider = col5.slider('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+asa = col5.number_input('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+wrap_up_slider = col6.slider('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+wrap_up = col6.number_input('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
 
 # Input number of calls
 calls_per_day = st.number_input('Number of Calls per Day', min_value=0, format="%i")  
