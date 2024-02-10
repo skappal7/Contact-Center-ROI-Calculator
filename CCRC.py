@@ -13,7 +13,7 @@ from PIL import Image
 st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:")
 
 # Company logo
-logo = Image.open('company_logo.png')  
+logo = Image.open('Humach.png')  
 st.image(logo, width=100)
 
 st.title('Conversation AI ROI Calculator') 
