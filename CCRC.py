@@ -120,21 +120,24 @@ for savings in savings_per_month:
 
 # Create waterfall chart data
 waterfall_data = [
-    go.Bar(x=months, y=[0] * len(months), marker=dict(color='rgb(31, 119, 180)'), name='Starting Value'),
-    go.Bar(x=months, y=savings_per_month, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings')
+    go.Bar(x=months, y=savings_per_month, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings', 
+           text=[f"${s:,.0f}" for s in savings_per_month], textposition='inside'),
+    go.Scatter(x=months, y=cumulative_savings, mode='lines+markers', marker=dict(color='rgb(255, 0, 0)'), 
+               name='Cumulative Savings')
 ]
-
-# Add cumulative savings to the chart
-waterfall_data.append(go.Scatter(x=months, y=cumulative_savings, mode='lines+markers', marker=dict(color='rgb(255, 0, 0)'), name='Cumulative Savings'))
 
 # Create waterfall chart layout
 waterfall_layout = go.Layout(title="Monthly Savings Waterfall Chart",
                              xaxis_title="Month",
-                             yaxis_title="Dollar Value Saved",
+                             yaxis=dict(title="Dollar Value Saved", overlaying='y', side='right'),
+                             yaxis2=dict(title="Dollar Value Saved", overlaying='y', side='left'),
                              showlegend=True)
 
+# Create figure
+fig = go.Figure(data=waterfall_data, layout=waterfall_layout)
+
 # Plot the waterfall chart
-st.plotly_chart(go.Figure(data=waterfall_data, layout=waterfall_layout))  
+st.plotly_chart(fig)  
 
 # Show total improvement percentage
 st.write(f'Total Improvement Percentage: {round(total_reduction, 2)}%')
