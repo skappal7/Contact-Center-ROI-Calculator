@@ -22,6 +22,10 @@ st.title('Conversation AI ROI Calculator')
 # Sample list of months for demonstration
 months = ['Jan 2023', 'Feb 2023', 'Mar 2023', 'Apr 2023', 'May 2023', 'Jun 2023', 'Jul 2023', 'Aug 2023', 'Sep 2023', 'Oct 2023', 'Nov 2023', 'Dec 2023']
 
+# Date range selection
+start_date = st.date_input("Select Start Date", value=pd.to_datetime('2023-01-01'))
+end_date = st.date_input("Select End Date", value=pd.to_datetime('2023-12-31'))
+
 # Input current metrics
 col1, col2 = st.columns(2)
 current_aht = col1.number_input('Current AHT', min_value=0.0, format="%.0f")
@@ -86,7 +90,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown(
         f"""
-        <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:150px;">
+        <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
         <span style="color:#002244;font-size:18px;"><b>FTE Savings</b></span><br>
         <span style="color:#ffffff;font-size:28px;"><b>{fte_savings}</b></span>
         </div>
@@ -97,7 +101,7 @@ with col1:
 with col2:
     st.markdown(
         f"""
-        <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:150px;">
+        <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
         <span style="color:#002244;font-size:18px;"><b>Total Monthly Savings</b></span><br>
         <span style="color:#ffffff;font-size:28px;"><b>${total_monthly_savings:,.2f}</b></span>
         </div>
