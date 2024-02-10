@@ -8,29 +8,31 @@ Original file is located at
 """
 
 import streamlit as st
-import pandas as pd 
+import pandas as pd
 import plotly.express as px
 
-# Input metrics
-cost_per_call = st.number_input('Cost Per Call', value=15, format='$%.2f') 
+# Input metrics  
+cost_per_call = st.number_input('Cost Per Call', value=15)
+st.write(f'Cost Per Call: ${cost_per_call:,.2f}')
+
 calls_per_day = st.number_input('Calls Per Day', value=2500, format='%i')
 
-aht_base = 450
-cost_per_sec = cost_per_call / aht_base
+aht_base = 450 
+cost_per_sec = cost_per_call / aht_base  
 total_cost = cost_per_call * calls_per_day
 
 st.write(f'Cost Per Second: ${cost_per_sec:.2f}')
 st.write(f'Total Cost: ${total_cost:,}')
 
-# Input metrics
-current_aht = st.number_input('Current AHT')  
-current_non_talk = st.number_input('Current Non-Talk Time')
+# Input current metrics
+current_aht = st.number_input('Current AHT')
+current_non_talk = st.number_input('Current Non-Talk Time')   
 
-# Input reductions  
-aht_red = st.slider('AHT Reduction %', 0, 100, 0)  
+# Input reductions
+aht_red = st.slider('AHT Reduction %', 0, 100, 0)
 non_talk_red = st.slider('Non-Talk Reduction %', 0, 100, 0)
 
-# Calculations
+# Calculations  
 aht_reduced = aht_base * (1 - aht_red/100)
 non_talk_reduced = current_non_talk * (1 - non_talk_red/100)
 
@@ -41,43 +43,43 @@ total_reduction = round((call_duration_before - call_duration_after) / call_dura
 
 st.write(f'Total Reduction: {total_reduction}%')
 
-# Total seconds  
-secs_before = round(calls_per_day * call_duration_before)
+# Total seconds
+secs_before = round(calls_per_day * call_duration_before)  
 secs_after = round(calls_per_day * call_duration_after)
 
-st.write(f'Total Seconds Without Reduction: {secs_before}')  
-st.write(f'Total Seconds With Reduction: {secs_after}')
+st.write(f'Total Seconds Without Reduction: {secs_before}')
+st.write(f'Total Seconds With Reduction: {secs_after}')   
 
 # FTE savings
-fte_before = secs_before / 3600 / 8  
+fte_before = secs_before / 3600 / 8
 fte_after = secs_after / 3600 / 8
 fte_savings = round(fte_before - fte_after)
 
-st.metric('FTE Savings', fte_savings)
+st.metric('FTE Savings', fte_savings)  
 
 # Trend chart
-start = st.date_input('Start Date') 
+start = st.date_input('Start Date')
 end = st.date_input('End Date')
 
-months = pd.date_range(start, end, freq='MS').strftime("%b-%y").tolist()
+months = pd.date_range(start, end, freq='MS').strftime("%b-%y").tolist() 
 
-improvements = [0] 
+improvements = [0]  
 for m in range(len(months)-1):
-    if m < 3: 
-        improvements.append(round(total_reduction * 0.02)) 
-    elif m < 6:
+    if m < 3:
+        improvements.append(round(total_reduction * 0.02))
+    elif m < 6: 
         improvements.append(round(total_reduction * 0.04))
     else:
         improvements.append(round(total_reduction/12))
         
-df = pd.DataFrame({'Months': months, 'Improvements': improvements})
+df = pd.DataFrame({'Months': months, 'Improvements': improvements}) 
 
 fig = px.line(df, x='Months', y='Improvements')
 st.write(fig)
 
-# Savings
+# Savings  
 secs_saved = call_duration_before - call_duration_after
-savings_per_call = secs_saved * cost_per_sec  
+savings_per_call = secs_saved * cost_per_sec
 
-monthly_savings = round(savings_per_call * calls_per_day * 30)
+monthly_savings = round(savings_per_call * calls_per_day * 30) 
 st.metric('Monthly Savings', f'${monthly_savings}')
