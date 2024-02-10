@@ -124,9 +124,9 @@ fig = go.Figure(data=waterfall_data, layout=waterfall_layout)
 # Plot the waterfall chart
 st.plotly_chart(fig)  
 
-# Display FTE savings and total monthly savings at the top
-col7, col8, col9 = st.columns(3)
-with col7:
+# Display FTE savings, total monthly savings, and total improvement percentage at the top
+col1, col2, col3 = st.columns(3)
+with col1:
     st.markdown(
         f"""
         <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:150px;">
@@ -137,7 +137,7 @@ with col7:
         unsafe_allow_html=True
     )
 
-with col8:
+with col2:
     st.markdown(
         f"""
         <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:150px;">
@@ -148,7 +148,7 @@ with col8:
         unsafe_allow_html=True
     )
 
-with col9:
+with col3:
     st.markdown(
         f"""
         <div style="background-color:#2E2E2E;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:150px;">
