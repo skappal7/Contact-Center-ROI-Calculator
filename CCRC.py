@@ -108,7 +108,7 @@ with col8:
 with col9:
     st.markdown(
         f"""
-        <div style="background-color:#2f4f4f;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:92px;">
+        <div style="background-color:#2f4f4f;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width=300px,height=92px;">
         <span style="color:#ffffff;font-size:18px;"><b>Total Improvement Percentage</b></span><br>
         <span style="color:#ffffff;font-size:28px;"><b>{round(total_reduction, 2)}%</b></span>
         </div>
@@ -169,3 +169,6 @@ fig = go.Figure(data=waterfall_data, layout=waterfall_layout)
 
 # Plot the waterfall chart
 st.plotly_chart(fig)  
+
+# Show total improvement percentage
+st.write(f'Total Improvement Percentage: {round(total_reduction, 2)}%')
