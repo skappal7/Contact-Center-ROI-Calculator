@@ -11,13 +11,13 @@ from PIL import Image
 import pandas as pd
 import plotly.graph_objects as go
 
-st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:")
+st.set_page_config(page_title='Conversational AI Implementation ROI Calculator', page_icon=":robot:")
 
 # Company logo
 logo = Image.open('Humach.png')
 st.image(logo, width=100)
 
-st.title('Conversation AI ROI Calculator')
+st.title('Conversational AI ROI Calculator')
 
 # Sample list of months for demonstration
 months = ['Jan 2024', 'Feb 2024', 'Mar 2024', 'Apr 2024', 'May 2024', 'Jun 2024', 'Jul 2024', 'Aug 2024', 'Sep 2024', 'Oct 2024', 'Nov 2024', 'Dec 2024']
