@@ -17,7 +17,7 @@ st.set_page_config(page_title='Conversational AI Implementation ROI Calculator',
 logo = Image.open('Humach.png')
 st.image(logo, width=200)
 
-st.title('Conversation AI ROI Calculator')
+st.title('Conversational AI Implementation ROI Calculator')
 
 # Input current metrics
 col1, col2 = st.columns(2)
