@@ -9,7 +9,7 @@ Original file is located at
 import streamlit as st
 from PIL import Image
 import pandas as pd
-import plotly.express as px
+import plotly.graph_objects as go
 
 st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:")
 
@@ -98,10 +98,34 @@ end_month = st.date_input('End month', value=pd.to_datetime('2023-12-01'))
 months = pd.date_range(start_month, end_month, freq='MS').strftime("%b %Y").tolist()
 improvements = [0] + [total_reduction/12]*(len(months)-2) + [total_reduction] 
 
-df = pd.DataFrame({'Months': months, 'Improvements': improvements})
+# Monthly savings calculation for waterfall chart
+savings_per_month = [0]  # First month (ramp-up period)
+improvement_per_month = total_reduction / 100  # Normalize total improvement to 1
+for i in range(1, len(months)):
+    if i <= 2:
+        # After ramp-up period, show 10% improvement each month
+        improvement = 0.1 * improvement_per_month
+    else:
+        # After second quarter, show full improvement
+        improvement = improvement_per_month
+    savings = savings_per_call * calls_per_day * 30 * improvement
+    savings_per_month.append(savings)
 
-fig = px.line(df, x='Months', y='Improvements')
-st.write(fig)  
+fig = go.Figure(go.Waterfall(
+    name="",
+    orientation="v",
+    measure=["relative"] + ["total"] * (len(savings_per_month) - 2) + ["relative"],
+    x=months,
+    text=[""] + [f"${savings:,.2f}" for savings in savings_per_month[1:-1]] + [""],
+    y=savings_per_month
+))
+
+fig.update_layout(title="Monthly Savings Waterfall Chart",
+                  xaxis_title="Month",
+                  yaxis_title="Dollar Value Saved",
+                  showlegend=False)
+
+st.plotly_chart(fig)  
 
 # Show total improvement percentage
 st.write(f'Total Improvement Percentage: {round(total_reduction, 2)}%')
