@@ -73,30 +73,36 @@ fte_before = total_secs_before / (60*60*8)
 fte_after = total_secs_after / (60*60*8)
 fte_savings = round(fte_before - fte_after)
 
-st.metric('FTE Savings', fte_savings)
-
-# Cost savings
+# Total monthly savings
 seconds_saved_per_call = call_duration_before - call_duration_after
 savings_per_call = seconds_saved_per_call * cost_per_sec  
 total_monthly_savings = savings_per_call * calls_per_day * 30
 
-st.metric('Total Monthly Savings ($)', f"${total_monthly_savings:,.2f}")
+# Display FTE savings and total monthly savings at the top
+st.markdown(
+    f"""
+    <div style="background-color:#D0E3FA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+    <span style="color:#2E64FE;font-size:24px;"><b>FTE Savings</b></span><br>
+    <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/285/man-office-worker-light-skin-tone_1f468-1f3fb-200d-1f4bc.png" alt="agent" width="50" height="50">
+    <span style="color:#2E64FE;font-size:24px;"><b>{fte_savings}</b></span>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-# Total cost, cost per second, calls per day
-st.write(f'Cost Per Second: ${cost_per_sec:.2f}')
-st.write(f'Total Cost: ${total_cost:.2f}')
-st.write(f'Calls per Day: {calls_per_day}')
+st.markdown(
+    f"""
+    <div style="background-color:#D0E3FA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+    <span style="color:#2E64FE;font-size:24px;"><b>Total Monthly Savings</b></span><br>
+    <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/285/money-bag_1f4b0.png" alt="money" width="50" height="50">
+    <span style="color:#2E64FE;font-size:24px;"><b>${total_monthly_savings:,.2f}</b></span>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-# Total seconds without reduction and with reduction section with 0 decimal places
-st.write(f'Total Seconds Without Reduction: {total_secs_before:.0f}')
-st.write(f'Total Seconds With Reduction: {total_secs_after:.0f}')
-
-# Improvement trend chart
-start_month = st.date_input('Start month', value=pd.to_datetime('2023-01-01'))
-end_month = st.date_input('End month', value=pd.to_datetime('2023-12-01'))  
-
-months = pd.date_range(start_month, end_month, freq='MS').strftime("%b %Y").tolist()
-improvements = [0] + [total_reduction/12]*(len(months)-2) + [total_reduction] 
+# Waterfall chart for savings
+st.subheader("Monthly Savings Waterfall Chart")
 
 # Monthly savings calculation for waterfall chart
 savings_per_month = []
@@ -129,8 +135,8 @@ waterfall_data = [
 # Create waterfall chart layout
 waterfall_layout = go.Layout(title="Monthly Savings Waterfall Chart",
                              xaxis_title="Month",
-                             yaxis=dict(title="Monthly Savings ($)", overlaying='y', side='left', range=[0, max(savings_per_month) * 1.2]),
-                             yaxis2=dict(title="Cumulative Savings ($)", overlaying='y', side='right', range=[0, max(cumulative_savings) * 1.2]),
+                             yaxis=dict(title="Savings ($)", overlaying='y', side='left'),
+                             yaxis2=dict(title="Cumulative Savings ($)", overlaying='y', side='right'),
                              showlegend=True)
 
 # Create figure
