@@ -14,7 +14,7 @@ import plotly.express as px
 st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:")
 
 # Company logo
-logo = Image.open('Humach.png')
+logo = Image.open('humach.png')
 st.image(logo, width=100)
 
 st.title('Conversation AI ROI Calculator')
@@ -29,16 +29,16 @@ current_wrap_up = col2.number_input('Current Wrap Up', min_value=0.0, format="%.
 # Input simulated metrics  
 col3, col4 = st.columns(2)
 aht_slider = col3.slider('AHT % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
-aht = col3.number_input('AHT % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+aht = col3.number_input('AHT % Reduction', min_value=0.0, max_value=100.0, step=0.05, value=aht_slider, format="%.2f")
 non_talk_slider = col4.slider('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
-non_talk_time = col4.number_input('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+non_talk_time = col4.number_input('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, step=0.05, value=non_talk_slider, format="%.2f")
 
 # Input simulated metrics  
 col5, col6 = st.columns(2)
 asa_slider = col5.slider('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
-asa = col5.number_input('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+asa = col5.number_input('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, value=asa_slider, format="%.2f")
 wrap_up_slider = col6.slider('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
-wrap_up = col6.number_input('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+wrap_up = col6.number_input('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, value=wrap_up_slider, format="%.2f")
 
 # Input number of calls
 calls_per_day = st.number_input('Number of Calls per Day', min_value=0, format="%i")  
@@ -77,9 +77,8 @@ fte_savings = round(fte_before - fte_after)
 st.metric('FTE Savings', fte_savings)
 
 # Cost savings
-secs_saved_per_call = call_duration_before - call_duration_after 
-savings_per_sec = secs_saved_per_call * cost_per_sec  
-
+secs_saved_per_sec = call_duration_before - call_duration_after 
+savings_per_sec = cost_per_sec * secs_saved_per_sec
 total_monthly_savings = round(savings_per_sec * 30, 2)  
 
 st.metric('Total Monthly Savings ($)', f"${total_monthly_savings:,.0f}")
