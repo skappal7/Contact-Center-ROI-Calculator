@@ -99,17 +99,24 @@ months = pd.date_range(start_month, end_month, freq='MS').strftime("%b %Y").toli
 improvements = [0] + [total_reduction/12]*(len(months)-2) + [total_reduction] 
 
 # Monthly savings calculation for waterfall chart
-savings_per_month = [0]  # First month (ramp-up period)
+savings_per_month = []
 improvement_per_month = total_reduction / 100  # Normalize total improvement to 1
-for i in range(1, len(months)):
+monthly_savings = savings_per_call * calls_per_day * 30
+for i in range(len(months)):
     if i <= 2:
         # After ramp-up period, show 10% improvement each month
-        improvement = 0.1 * improvement_per_month
+        savings = monthly_savings * 0.1 
     else:
         # After second quarter, show full improvement
-        improvement = improvement_per_month
-    savings = savings_per_call * calls_per_day * 30 * improvement
+        savings = monthly_savings * improvement_per_month
     savings_per_month.append(savings)
+
+# Create cumulative savings
+cumulative_savings = []
+cum_sum = 0
+for savings in savings_per_month:
+    cum_sum += savings  
+    cumulative_savings.append(cum_sum)
 
 # Create waterfall chart data
 waterfall_data = [
@@ -117,11 +124,8 @@ waterfall_data = [
     go.Bar(x=months, y=savings_per_month, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings')
 ]
 
-# Calculate cumulative savings
-cumulative_savings = [sum(savings_per_month[:i+1]) for i in range(len(savings_per_month))]
-
 # Add cumulative savings to the chart
-waterfall_data.append(go.Bar(x=months, y=cumulative_savings, marker=dict(color='rgb(255, 0, 0)'), name='Cumulative Savings'))
+waterfall_data.append(go.Scatter(x=months, y=cumulative_savings, mode='lines+markers', marker=dict(color='rgb(255, 0, 0)'), name='Cumulative Savings'))
 
 # Create waterfall chart layout
 waterfall_layout = go.Layout(title="Monthly Savings Waterfall Chart",
