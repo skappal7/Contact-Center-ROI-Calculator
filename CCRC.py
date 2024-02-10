@@ -17,29 +17,28 @@ st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robo
 logo = Image.open('Humach.png')
 st.image(logo, width=100)
 
-st.title('Conversation AI ROI Calculator')
+st.title('Conversational AI Implementation ROI Calculator')
 
 # Input current metrics
 col1, col2 = st.columns(2)
-current_aht = col1.number_input('Current AHT', min_value=0.0)
-current_non_talk_time = col2.number_input('Current Non-Talk Time', min_value=0.0)
-current_asa = col1.number_input('Current ASA', min_value=0.0)
-current_wrap_up = col2.number_input('Current Wrap Up', min_value=0.0)
+current_aht = col1.number_input('Current AHT', min_value=0.0, format="%.0f")
+current_non_talk_time = col2.number_input('Current Non-Talk Time', min_value=0.0, format="%.0f")
+current_asa = col1.number_input('Current ASA', min_value=0.0, format="%.0f")
+current_wrap_up = col2.number_input('Current Wrap Up', min_value=0.0, format="%.0f")
 
 # Input simulated metrics  
 col3, col4 = st.columns(2)
-aht = col3.slider('AHT % Reduction', min_value=0.0, max_value=100.0, value=0.0, step=0.05)
-non_talk_time = col4.slider('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, value=0.0, step=0.05)
-asa = col3.slider('ASA % Reduction', min_value=0.0, max_value=100.0, value=0.0, step=0.05)
-wrap_up = col4.slider('Wrap Up % Reduction', min_value=0.0, max_value=100.0, value=0.0, step=0.05)
+aht = col3.number_input('AHT % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+non_talk_time = col4.number_input('Non-Talk Time % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+asa = col3.number_input('ASA % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
+wrap_up = col4.number_input('Wrap Up % Reduction', min_value=0.0, max_value=100.0, step=0.05, format="%.2f")
 
 # Input number of calls
-calls_per_day = st.number_input('Number of Calls per Day', min_value=0, value=2500)  
+calls_per_day = st.number_input('Number of Calls per Day', min_value=0, format="%i")  
 
 # Input cost related metrics
-cost_per_call = st.number_input('Cost Per Call (Fully loaded)', min_value=0.0, format='%f')
-cost_per_sec = cost_per_call / current_aht if current_aht != 0 else 0
-calls_per_day_input = st.number_input('Calls per Day', min_value=0, format='%i')
+cost_per_call = st.number_input('Cost Per Call (Fully loaded)', min_value=0.0, format="%.2f")
+calls_per_day_input = st.number_input('Calls per Day', min_value=0, format="%i")
 
 # Calculations
 aht_base = 450.0
@@ -64,18 +63,18 @@ total_secs_after = calls_per_day * call_duration_after
 # FTE savings
 fte_before = total_secs_before / (60*60*8)
 fte_after = total_secs_after / (60*60*8)
-fte_savings = fte_before - fte_after
+fte_savings = round(fte_before - fte_after, 0)
 
 st.metric('FTE Savings', fte_savings)
 
 # Cost savings
 secs_saved_per_call = call_duration_before - call_duration_after 
-savings_per_call = secs_saved_per_call * cost_per_sec  
+savings_per_call = secs_saved_per_call * cost_per_call  
 
 total_savings = savings_per_call * calls_per_day 
-monthly_savings = total_savings * 30  
+monthly_savings = round(total_savings * 30, 2)  
 
-st.metric('Total Monthly Savings ($)', monthly_savings)
+st.metric('Total Monthly Savings ($)', f"${monthly_savings:.2f}")
 
 # Total seconds without reduction and with reduction section with 0 decimal places
 st.write(f'Total Seconds Without Reduction: {total_secs_before:.0f}')
