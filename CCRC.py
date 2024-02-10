@@ -116,9 +116,6 @@ with col9:
         unsafe_allow_html=True
     )
 
-# Waterfall chart for savings
-st.subheader("Monthly Savings Waterfall Chart")
-
 # Date selection
 start_date = st.date_input("Start Date", min_value=pd.to_datetime(months[0], format='%b %Y'), 
                            max_value=pd.to_datetime(months[-1], format='%b %Y'))
@@ -129,6 +126,9 @@ start_idx = months.index(start_date.strftime("%b %Y").title())
 end_idx = months.index(end_date.strftime("%b %Y").title())
 
 selected_months = months[start_idx:end_idx + 1]
+
+# Waterfall chart for savings
+st.subheader("Monthly Savings Waterfall Chart")
 
 # Monthly savings calculation for waterfall chart
 savings_per_month = []
