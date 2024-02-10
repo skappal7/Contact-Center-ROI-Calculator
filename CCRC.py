@@ -111,21 +111,26 @@ for i in range(1, len(months)):
     savings = savings_per_call * calls_per_day * 30 * improvement
     savings_per_month.append(savings)
 
-fig = go.Figure(go.Waterfall(
-    name="",
-    orientation="v",
-    measure=["relative"] + ["total"] * (len(savings_per_month) - 2) + ["relative"],
-    x=months,
-    text=[""] + [f"${savings:,.2f}" for savings in savings_per_month[1:-1]] + [""],
-    y=savings_per_month
-))
+# Create waterfall chart data
+waterfall_data = [
+    go.Bar(x=months, y=[0] * len(months), marker=dict(color='rgb(31, 119, 180)'), name='Starting Value'),
+    go.Bar(x=months, y=savings_per_month, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings')
+]
 
-fig.update_layout(title="Monthly Savings Waterfall Chart",
-                  xaxis_title="Month",
-                  yaxis_title="Dollar Value Saved",
-                  showlegend=False)
+# Calculate cumulative savings
+cumulative_savings = [sum(savings_per_month[:i+1]) for i in range(len(savings_per_month))]
 
-st.plotly_chart(fig)  
+# Add cumulative savings to the chart
+waterfall_data.append(go.Bar(x=months, y=cumulative_savings, marker=dict(color='rgb(255, 0, 0)'), name='Cumulative Savings'))
+
+# Create waterfall chart layout
+waterfall_layout = go.Layout(title="Monthly Savings Waterfall Chart",
+                             xaxis_title="Month",
+                             yaxis_title="Dollar Value Saved",
+                             showlegend=True)
+
+# Plot the waterfall chart
+st.plotly_chart(go.Figure(data=waterfall_data, layout=waterfall_layout))  
 
 # Show total improvement percentage
 st.write(f'Total Improvement Percentage: {round(total_reduction, 2)}%')
