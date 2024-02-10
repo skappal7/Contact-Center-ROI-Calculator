@@ -22,10 +22,6 @@ st.title('Conversation AI ROI Calculator')
 # Sample list of months for demonstration
 months = ['Jan 2023', 'Feb 2023', 'Mar 2023', 'Apr 2023', 'May 2023', 'Jun 2023', 'Jul 2023', 'Aug 2023', 'Sep 2023', 'Oct 2023', 'Nov 2023', 'Dec 2023']
 
-# Date range selection
-start_date = st.date_input("Select Start Date", value=pd.to_datetime('2023-01-01'))
-end_date = st.date_input("Select End Date", value=pd.to_datetime('2023-12-31'))
-
 # Input current metrics
 col1, col2 = st.columns(2)
 current_aht = col1.number_input('Current AHT', min_value=0.0, format="%.0f")
@@ -86,8 +82,8 @@ savings_per_call = seconds_saved_per_call * cost_per_sec
 total_monthly_savings = savings_per_call * calls_per_day * 30
 
 # Display FTE savings and total monthly savings at the top
-col1, col2, col3 = st.columns(3)
-with col1:
+col7, col8, col9 = st.columns(3)
+with col7:
     st.markdown(
         f"""
         <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
@@ -98,7 +94,7 @@ with col1:
         unsafe_allow_html=True
     )
 
-with col2:
+with col8:
     st.markdown(
         f"""
         <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
@@ -109,10 +105,10 @@ with col2:
         unsafe_allow_html=True
     )
 
-with col3:
+with col9:
     st.markdown(
         f"""
-        <div style="background-color:#2E2E2E;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <div style="background-color:#2f4f4f;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:92px;">
         <span style="color:#ffffff;font-size:18px;"><b>Total Improvement Percentage</b></span><br>
         <span style="color:#ffffff;font-size:28px;"><b>{round(total_reduction, 2)}%</b></span>
         </div>
@@ -123,11 +119,22 @@ with col3:
 # Waterfall chart for savings
 st.subheader("Monthly Savings Waterfall Chart")
 
+# Date selection
+start_date = st.date_input("Start Date", min_value=pd.to_datetime(months[0], format='%b %Y'), 
+                           max_value=pd.to_datetime(months[-1], format='%b %Y'))
+end_date = st.date_input("End Date", min_value=pd.to_datetime(months[0], format='%b %Y'), 
+                         max_value=pd.to_datetime(months[-1], format='%b %Y'))
+
+start_idx = months.index(start_date.strftime("%b %Y").title())
+end_idx = months.index(end_date.strftime("%b %Y").title())
+
+selected_months = months[start_idx:end_idx + 1]
+
 # Monthly savings calculation for waterfall chart
 savings_per_month = []
 improvement_per_month = total_reduction / 100  # Normalize total improvement to 1
 monthly_savings = savings_per_call * calls_per_day * 30
-for i in range(len(months)):
+for i in range(len(selected_months)):
     if i <= 2:
         # After ramp-up period, show 10% improvement each month
         savings = monthly_savings * 0.1 
@@ -136,24 +143,18 @@ for i in range(len(months)):
         savings = monthly_savings * improvement_per_month
     savings_per_month.append(savings)
 
-# Filter months based on selected date range
-start_idx = months.index(start_date.strftime("%b %Y"))
-end_idx = months.index(end_date.strftime("%b %Y"))
-months_filtered = months[start_idx:end_idx+1]
-savings_per_month_filtered = savings_per_month[start_idx:end_idx+1]
-
 # Create cumulative savings
 cumulative_savings = []
 cum_sum = 0
-for savings in savings_per_month_filtered:
+for savings in savings_per_month:
     cum_sum += savings  
     cumulative_savings.append(cum_sum)
 
 # Create waterfall chart data
 waterfall_data = [
-    go.Bar(x=months_filtered, y=savings_per_month_filtered, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings', 
-           text=[f"${s:,.0f}" for s in savings_per_month_filtered], textposition='inside'),
-    go.Scatter(x=months_filtered, y=cumulative_savings, mode='lines+markers', marker=dict(color='rgb(255, 0, 0)'), 
+    go.Bar(x=selected_months, y=savings_per_month, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings', 
+           text=[f"${s:,.0f}" for s in savings_per_month], textposition='inside'),
+    go.Scatter(x=selected_months, y=cumulative_savings, mode='lines+markers', marker=dict(color='rgb(255, 0, 0)'), 
                name='Cumulative Savings')
 ]
 
@@ -168,6 +169,3 @@ fig = go.Figure(data=waterfall_data, layout=waterfall_layout)
 
 # Plot the waterfall chart
 st.plotly_chart(fig)  
-
-# Show total improvement percentage
-# st.write(f'Total Improvement Percentage: {round(total_reduction, 2)}%')
