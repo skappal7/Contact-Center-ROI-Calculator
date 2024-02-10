@@ -45,9 +45,8 @@ calls_per_day = st.number_input('Number of Calls per Day', min_value=0, format="
 
 # Input cost related metrics
 cost_per_call = st.number_input('Cost Per Call (Fully loaded)', min_value=0.0, format="%.2f")
-cost_per_sec = cost_per_call / current_aht if current_aht != 0 else 0
+cost_per_sec = cost_per_call / 450.0 if current_aht != 0 else 0
 total_cost = cost_per_call * calls_per_day
-calls_per_day_input = st.number_input('Calls per Day', min_value=0, format="%i")
 
 # Calculations
 aht_base = 450.0
@@ -77,16 +76,16 @@ fte_savings = round(fte_before - fte_after)
 st.metric('FTE Savings', fte_savings)
 
 # Cost savings
-secs_saved_per_sec = call_duration_before - call_duration_after 
-savings_per_sec = cost_per_sec * secs_saved_per_sec
-total_monthly_savings = round(savings_per_sec * 30, 2)  
+seconds_saved_per_call = call_duration_before - call_duration_after
+savings_per_call = seconds_saved_per_call * cost_per_sec  
+total_monthly_savings = savings_per_call * calls_per_day * 30
 
-st.metric('Total Monthly Savings ($)', f"${total_monthly_savings:,.0f}")
+st.metric('Total Monthly Savings ($)', f"${total_monthly_savings:,.2f}")
 
 # Total cost, cost per second, calls per day
 st.write(f'Cost Per Second: ${cost_per_sec:.2f}')
 st.write(f'Total Cost: ${total_cost:.2f}')
-st.write(f'Calls per Day: {calls_per_day_input}')
+st.write(f'Calls per Day: {calls_per_day}')
 
 # Total seconds without reduction and with reduction section with 0 decimal places
 st.write(f'Total Seconds Without Reduction: {total_secs_before:.0f}')
@@ -105,4 +104,4 @@ fig = px.line(df, x='Months', y='Improvements')
 st.write(fig)  
 
 # Show total improvement percentage
-st.write(f'Total Improvement Percentage: {total_reduction:.2f}%')
+st.write(f'Total Improvement Percentage: {round(total_reduction, 2)}%')
