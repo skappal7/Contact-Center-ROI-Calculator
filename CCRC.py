@@ -19,6 +19,9 @@ st.image(logo, width=100)
 
 st.title('Conversation AI ROI Calculator')
 
+# Sample list of months for demonstration
+months = ['Jan 2023', 'Feb 2023', 'Mar 2023', 'Apr 2023', 'May 2023', 'Jun 2023', 'Jul 2023', 'Aug 2023', 'Sep 2023', 'Oct 2023', 'Nov 2023', 'Dec 2023']
+
 # Input current metrics
 col1, col2 = st.columns(2)
 current_aht = col1.number_input('Current AHT', min_value=0.0, format="%.0f")
@@ -129,14 +132,13 @@ waterfall_data = [
     go.Bar(x=months, y=savings_per_month, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings', 
            text=[f"${s:,.0f}" for s in savings_per_month], textposition='inside'),
     go.Scatter(x=months, y=cumulative_savings, mode='lines+markers', marker=dict(color='rgb(255, 0, 0)'), 
-               name='Cumulative Savings', yaxis='y2')
+               name='Cumulative Savings')
 ]
 
 # Create waterfall chart layout
 waterfall_layout = go.Layout(title="Monthly Savings Waterfall Chart",
                              xaxis_title="Month",
                              yaxis=dict(title="Savings ($)", overlaying='y', side='left'),
-                             yaxis2=dict(title="Cumulative Savings ($)", overlaying='y', side='right'),
                              showlegend=True)
 
 # Create figure
