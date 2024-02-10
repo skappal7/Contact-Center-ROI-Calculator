@@ -123,14 +123,14 @@ waterfall_data = [
     go.Bar(x=months, y=savings_per_month, marker=dict(color='rgb(0, 128, 0)'), name='Monthly Savings', 
            text=[f"${s:,.0f}" for s in savings_per_month], textposition='inside'),
     go.Scatter(x=months, y=cumulative_savings, mode='lines+markers', marker=dict(color='rgb(255, 0, 0)'), 
-               name='Cumulative Savings')
+               name='Cumulative Savings', yaxis='y2')
 ]
 
 # Create waterfall chart layout
 waterfall_layout = go.Layout(title="Monthly Savings Waterfall Chart",
                              xaxis_title="Month",
-                             yaxis=dict(title="Dollar Value Saved", overlaying='y', side='right'),
-                             yaxis2=dict(title="Dollar Value Saved", overlaying='y', side='left'),
+                             yaxis=dict(title="Monthly Savings ($)", overlaying='y', side='left'),
+                             yaxis2=dict(title="Cumulative Savings ($)", overlaying='y', side='right'),
                              showlegend=True)
 
 # Create figure
