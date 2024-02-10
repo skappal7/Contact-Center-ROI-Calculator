@@ -84,9 +84,9 @@ total_monthly_savings = savings_per_call * calls_per_day * 30
 # Display FTE savings and total monthly savings at the top
 st.markdown(
     f"""
-    <div style="background-color:#D0E3FA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
-    <span style="color:#2E64FE;font-size:18px;"><b>FTE Savings</b></span><br>
-    <span style="color:#2E64FE;font-size:28px;"><b>{fte_savings}</b></span>
+    <div style="background-color:#002D62;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+    <span style="color:#002244;font-size:18px;"><b>FTE Savings</b></span><br>
+    <span style="color:#ffffff;font-size:28px;"><b>{fte_savings}</b></span>
     </div>
     """,
     unsafe_allow_html=True
@@ -94,9 +94,9 @@ st.markdown(
 
 st.markdown(
     f"""
-    <div style="background-color:#D0E3FA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
-    <span style="color:#2E64FE;font-size:18px;"><b>Total Monthly Savings</b></span><br>
-    <span style="color:#2E64FE;font-size:28px;"><b>${total_monthly_savings:,.2f}</b></span>
+    <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+    <span style="color:#002244;font-size:18px;"><b>Total Monthly Savings</b></span><br>
+    <span style="color:#ffffff;font-size:28px;"><b>${total_monthly_savings:,.2f}</b></span>
     </div>
     """,
     unsafe_allow_html=True
