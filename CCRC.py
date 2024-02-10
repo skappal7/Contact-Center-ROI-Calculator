@@ -86,7 +86,6 @@ st.markdown(
     f"""
     <div style="background-color:#D0E3FA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
     <span style="color:#2E64FE;font-size:24px;"><b>FTE Savings</b></span><br>
-    <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/285/man-office-worker-light-skin-tone_1f468-1f3fb-200d-1f4bc.png" alt="agent" width="50" height="50">
     <span style="color:#2E64FE;font-size:24px;"><b>{fte_savings}</b></span>
     </div>
     """,
@@ -97,7 +96,6 @@ st.markdown(
     f"""
     <div style="background-color:#D0E3FA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
     <span style="color:#2E64FE;font-size:24px;"><b>Total Monthly Savings</b></span><br>
-    <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/285/money-bag_1f4b0.png" alt="money" width="50" height="50">
     <span style="color:#2E64FE;font-size:24px;"><b>${total_monthly_savings:,.2f}</b></span>
     </div>
     """,
