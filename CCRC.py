@@ -11,7 +11,20 @@ from PIL import Image
 import pandas as pd
 import plotly.graph_objects as go
 
-st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:")
+st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:", layout="wide")
+
+# Set background color
+page_bg_color = "#00D2FC"
+st.markdown(
+    f"""
+    <style>
+    .reportview-container {{
+        background-color: {page_bg_color};
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Company logo
 logo = Image.open('Humach.png')
