@@ -129,8 +129,8 @@ waterfall_data = [
 # Create waterfall chart layout
 waterfall_layout = go.Layout(title="Monthly Savings Waterfall Chart",
                              xaxis_title="Month",
-                             yaxis=dict(title="Monthly Savings ($)", overlaying='y', side='left'),
-                             yaxis2=dict(title="Cumulative Savings ($)", overlaying='y', side='right'),
+                             yaxis=dict(title="Monthly Savings ($)", overlaying='y', side='left', range=[0, max(savings_per_month) * 1.2]),
+                             yaxis2=dict(title="Cumulative Savings ($)", overlaying='y', side='right', range=[0, max(cumulative_savings) * 1.2]),
                              showlegend=True)
 
 # Create figure
