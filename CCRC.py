@@ -83,7 +83,7 @@ savings_per_call = secs_saved_per_call * cost_per_call
 total_savings = savings_per_call * calls_per_day 
 monthly_savings = round(total_savings * 30, 2)  
 
-st.metric('Total Monthly Savings ($)', f"${monthly_savings:.2f}")
+st.metric('Total Monthly Savings ($)', f"${monthly_savings:,.0f}")
 
 # Total cost, cost per second, calls per day
 st.write(f'Cost Per Second: ${cost_per_sec:.2f}')
