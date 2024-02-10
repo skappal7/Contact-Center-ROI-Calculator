@@ -117,13 +117,11 @@ with col9:
     )
 
 # Date selection
-start_date = st.date_input("Start Date", min_value=pd.to_datetime(months[0], format='%b %Y'), 
-                           max_value=pd.to_datetime(months[-1], format='%b %Y'))
-end_date = st.date_input("End Date", min_value=pd.to_datetime(months[0], format='%b %Y'), 
-                         max_value=pd.to_datetime(months[-1], format='%b %Y'))
+start_date = st.selectbox("Start Date", options=months, index=0)
+end_date = st.selectbox("End Date", options=months, index=len(months)-1)
 
-start_idx = months.index(start_date.strftime("%b %Y").title())
-end_idx = months.index(end_date.strftime("%b %Y").title())
+start_idx = months.index(start_date)
+end_idx = months.index(end_date)
 
 selected_months = months[start_idx:end_idx + 1]
 
