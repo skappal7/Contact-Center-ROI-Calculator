@@ -11,13 +11,13 @@ from PIL import Image
 import pandas as pd
 import plotly.express as px
 
-st.set_page_config(page_title='Conversational AI Implementation ROI Calculator', page_icon=":robot:")
+st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:")
 
 # Company logo
-logo = Image.open('Humach.png')
-st.image(logo, width=200)
+logo = Image.open('humach.png')
+st.image(logo, width=100)
 
-st.title('Conversational AI Implementation ROI Calculator')
+st.title('Conversation AI ROI Calculator')
 
 # Input current metrics
 col1, col2 = st.columns(2)
@@ -45,6 +45,8 @@ calls_per_day = st.number_input('Number of Calls per Day', min_value=0, format="
 
 # Input cost related metrics
 cost_per_call = st.number_input('Cost Per Call (Fully loaded)', min_value=0.0, format="%.2f")
+cost_per_sec = cost_per_call / current_aht if current_aht != 0 else 0
+total_cost = cost_per_call * calls_per_day
 calls_per_day_input = st.number_input('Calls per Day', min_value=0, format="%i")
 
 # Calculations
@@ -70,7 +72,7 @@ total_secs_after = calls_per_day * call_duration_after
 # FTE savings
 fte_before = total_secs_before / (60*60*8)
 fte_after = total_secs_after / (60*60*8)
-fte_savings = round(fte_before - fte_after, 0)
+fte_savings = round(fte_before - fte_after)
 
 st.metric('FTE Savings', fte_savings)
 
@@ -82,6 +84,11 @@ total_savings = savings_per_call * calls_per_day
 monthly_savings = round(total_savings * 30, 2)  
 
 st.metric('Total Monthly Savings ($)', f"${monthly_savings:.2f}")
+
+# Total cost, cost per second, calls per day
+st.write(f'Cost Per Second: ${cost_per_sec:.2f}')
+st.write(f'Total Cost: ${total_cost:.2f}')
+st.write(f'Calls per Day: {calls_per_day_input}')
 
 # Total seconds without reduction and with reduction section with 0 decimal places
 st.write(f'Total Seconds Without Reduction: {total_secs_before:.0f}')
