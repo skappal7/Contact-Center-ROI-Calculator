@@ -10,7 +10,7 @@ Original file is located at
 import streamlit as st
 from PIL import Image
 
-st.set_page_config(page_title='Conversation AI ROI Calculator', page_icon=":robot:")
+st.set_page_config(page_title='Conversational AI ROI Calculator', page_icon=":robot:")
 
 # Company logo
 logo = Image.open('Humach.png')  
