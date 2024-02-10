@@ -129,7 +129,7 @@ col7, col8, col9 = st.columns(3)
 with col7:
     st.markdown(
         f"""
-        <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:150px;">
         <span style="color:#002244;font-size:18px;"><b>FTE Savings</b></span><br>
         <span style="color:#ffffff;font-size:28px;"><b>{fte_savings}</b></span>
         </div>
@@ -140,7 +140,7 @@ with col7:
 with col8:
     st.markdown(
         f"""
-        <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:150px;">
         <span style="color:#002244;font-size:18px;"><b>Total Monthly Savings</b></span><br>
         <span style="color:#ffffff;font-size:28px;"><b>${total_monthly_savings:,.2f}</b></span>
         </div>
@@ -151,7 +151,7 @@ with col8:
 with col9:
     st.markdown(
         f"""
-        <div style="background-color:#2E2E2E;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <div style="background-color:#2E2E2E;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:150px;">
         <span style="color:#ffffff;font-size:18px;"><b>Total Improvement Percentage</b></span><br>
         <span style="color:#ffffff;font-size:28px;"><b>{round(total_reduction, 2)}%</b></span>
         </div>
