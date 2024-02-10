@@ -81,30 +81,6 @@ seconds_saved_per_call = call_duration_before - call_duration_after
 savings_per_call = seconds_saved_per_call * cost_per_sec  
 total_monthly_savings = savings_per_call * calls_per_day * 30
 
-# Display FTE savings and total monthly savings at the top
-col7, col8 = st.columns(2)
-with col7:
-    st.markdown(
-        f"""
-        <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
-        <span style="color:#002244;font-size:18px;"><b>FTE Savings</b></span><br>
-        <span style="color:#ffffff;font-size:28px;"><b>{fte_savings}</b></span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-with col8:
-    st.markdown(
-        f"""
-        <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
-        <span style="color:#002244;font-size:18px;"><b>Total Monthly Savings</b></span><br>
-        <span style="color:#ffffff;font-size:28px;"><b>${total_monthly_savings:,.2f}</b></span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
 # Waterfall chart for savings
 st.subheader("Monthly Savings Waterfall Chart")
 
@@ -148,5 +124,37 @@ fig = go.Figure(data=waterfall_data, layout=waterfall_layout)
 # Plot the waterfall chart
 st.plotly_chart(fig)  
 
-# Show total improvement percentage
-st.write(f'Total Improvement Percentage: {round(total_reduction, 2)}%')
+# Display FTE savings and total monthly savings at the top
+col7, col8, col9 = st.columns(3)
+with col7:
+    st.markdown(
+        f"""
+        <div style="background-color:#0089BA;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <span style="color:#002244;font-size:18px;"><b>FTE Savings</b></span><br>
+        <span style="color:#ffffff;font-size:28px;"><b>{fte_savings}</b></span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col8:
+    st.markdown(
+        f"""
+        <div style="background-color:#0066b2;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <span style="color:#002244;font-size:18px;"><b>Total Monthly Savings</b></span><br>
+        <span style="color:#ffffff;font-size:28px;"><b>${total_monthly_savings:,.2f}</b></span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col9:
+    st.markdown(
+        f"""
+        <div style="background-color:#2E2E2E;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);">
+        <span style="color:#ffffff;font-size:18px;"><b>Total Improvement Percentage</b></span><br>
+        <span style="color:#ffffff;font-size:28px;"><b>{round(total_reduction, 2)}%</b></span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
