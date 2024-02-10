@@ -78,12 +78,11 @@ st.metric('FTE Savings', fte_savings)
 
 # Cost savings
 secs_saved_per_call = call_duration_before - call_duration_after 
-savings_per_call = secs_saved_per_call * cost_per_call  
+savings_per_sec = secs_saved_per_call * cost_per_sec  
 
-total_savings = savings_per_call * calls_per_day 
-monthly_savings = round(total_savings * 30, 2)  
+total_monthly_savings = round(savings_per_sec * 30, 2)  
 
-st.metric('Total Monthly Savings ($)', f"${monthly_savings:,.0f}")
+st.metric('Total Monthly Savings ($)', f"${total_monthly_savings:,.0f}")
 
 # Total cost, cost per second, calls per day
 st.write(f'Cost Per Second: ${cost_per_sec:.2f}')
