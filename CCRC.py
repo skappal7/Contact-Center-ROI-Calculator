@@ -112,7 +112,7 @@ with col2:
 with col3:
     st.markdown(
         f"""
-        <div style="background-color:#2E2E2E;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:130px;">
+        <div style="background-color:#2E2E2E;padding:10px;border-radius:10px;box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);width:300px;height:120px;">
         <span style="color:#ffffff;font-size:18px;"><b>Total Improvement Percentage</b></span><br>
         <span style="color:#ffffff;font-size:28px;"><b>{round(total_reduction, 2)}%</b></span>
         </div>
