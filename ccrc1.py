@@ -220,7 +220,7 @@ monthly_savings = savings_per_call * calls_per_day * 30
 for i in range(len(selected_months)):
   if i <= 2:
     # After ramp-up period, show 10% improvement each month
-    savings = monthly_savings * 0.1
+    savings = monthly_savings * improvement_per_month * 0.1
   else:
     # After second quarter, show full improvement
     savings = monthly_savings * improvement_per_month
